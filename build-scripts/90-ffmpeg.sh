@@ -71,6 +71,9 @@ elif [[ "$RUNNER_OS" == "Windows" ]]; then
   # we're in an msys environment, ffmpeg reasonably assumes we're
   # building for that environment if we don't specify this.
   PLATFORM_CONFIGURE_FLAGS="--target-os=mingw64"
+  if [[ "$TARGET_ARCH" == "arm64" ]]; then
+    PLATFORM_CONFIGURE_FLAGS="$PLATFORM_CONFIGURE_FLAGS --cc=clang --arch=aarch64 --enable-cross-compile"
+  fi
 fi
 
 if ! ./configure \
