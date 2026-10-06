@@ -30,9 +30,17 @@ sed \
   -e 's/-Wno-documentation-deprecated-sync//' \
   -i.bk library/CMakeLists.txt
 
+MBEDTLS_CMAKE_ARGS=()
+if [[ "$RUNNER_OS" == "Windows" && "$TARGET_ARCH" == "arm64" ]]; then
+  # The Windows ARM64 SDK's FD_SET macro triggers a sign-compare warning in
+  # mbedTLS 3.4.1, which its default fatal-warnings setting promotes to error.
+  MBEDTLS_CMAKE_ARGS+=(-DMBEDTLS_FATAL_WARNINGS=OFF)
+fi
+
 # NOTE: without CMAKE_INSTALL_PREFIX on Windows, files are installed
 # to c:\Program Files.
 cmake . \
+  "${MBEDTLS_CMAKE_ARGS[@]}" \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DENABLE_PROGRAMS=OFF \
   -DUNSAFE_BUILD=OFF \
