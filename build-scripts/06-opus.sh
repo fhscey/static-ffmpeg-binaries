@@ -23,9 +23,10 @@ cd opus
 
 OPUS_CMAKE_ARGS=()
 if [[ "$RUNNER_OS" == "Windows" && "$TARGET_ARCH" == "arm64" ]]; then
-  # MinGW ARM64 has no runtime CPU detection backend; NEON is mandatory on
-  # ARM64, so compile its optimized path without runtime dispatch.
-  OPUS_CMAKE_ARGS+=(-DOPUS_MAY_HAVE_NEON=OFF -DOPUS_PRESUME_NEON=ON)
+  # MinGW ARM64 has no runtime CPU detection backend. Opus 1.6.1's CMake
+  # configuration still adds NEON sources when only OPUS_MAY_HAVE_NEON is
+  # disabled, leaving those sources without their required declarations.
+  OPUS_CMAKE_ARGS+=(-DOPUS_DISABLE_INTRINSICS=ON)
 fi
 
 # NOTE: without CMAKE_INSTALL_PREFIX on Windows, files are installed
