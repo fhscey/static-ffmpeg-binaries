@@ -16,8 +16,8 @@
 name: Release
 
 # Runs when a new tag is created.  Creates a release for that tag, then builds
-# ffmpeg and ffprobe on all OS & CPU combinations, then attaches them to the
-# release.
+# ffmpeg and ffprobe on all OS & CPU combinations, including Windows ARM64,
+# then attaches them to the release.
 on:
   push:
     tags:

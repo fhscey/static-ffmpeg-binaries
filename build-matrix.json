@@ -68,6 +68,12 @@
       "os_name": "win",
       "target_arch": "x64",
       "exe_ext": ".exe"
+    },
+    {
+      "os": "windows-11-arm",
+      "os_name": "win",
+      "target_arch": "arm64",
+      "exe_ext": ".exe"
     }
   ],
 

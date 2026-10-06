@@ -119,19 +119,25 @@ elif [[ "$RUNNER_OS" == "Windows" ]]; then
   # https://github.com/actions/runner-images/issues/5459, in which there is a
   # conflicting version that GitHub will not remove.
   #
-  # NOTE: mingw-w64-x86_64-gcc must be installed because of conflicting GCC
-  # toolchains installed with Strawberry Perl, Git, and one more through
-  # Chocolatey.  None of these build clean executables that only depend on
-  # standard DLLs.
-  pacman -Sy --noconfirm \
-    diffutils \
-    git \
-    make \
-    mingw-w64-x86_64-gcc \
-    nasm \
-    patch \
-    pkg-config \
+  WINDOWS_PACKAGES=(
+    diffutils
+    git
+    make
+    nasm
+    patch
+    pkg-config
     yasm
+  )
+  if [[ "$TARGET_ARCH" == "arm64" ]]; then
+    WINDOWS_PACKAGES+=(mingw-w64-clang-aarch64-clang)
+    echo "CC=clang" >> "$GITHUB_ENV"
+    echo "CXX=clang++" >> "$GITHUB_ENV"
+  else
+    # Use the MSYS2 compiler because the other GCC toolchains on the runner do
+    # not produce clean executables that only depend on standard DLLs.
+    WINDOWS_PACKAGES+=(mingw-w64-x86_64-gcc)
+  fi
+  pacman -Sy --noconfirm "${WINDOWS_PACKAGES[@]}"
 
   # Make sure that cmake generates makefiles and not ninja files.
   echo "CMAKE_GENERATOR=MSYS Makefiles" >> "$GITHUB_ENV"
