@@ -63,7 +63,7 @@ elif [[ "$RUNNER_OS" == "macOS" ]]; then
 elif [[ "$RUNNER_OS" == "Windows" ]]; then
   # /usr/local/incude and /usr/local/lib are not in mingw's include
   # and linker paths by default, so add them.
-  export CFLAGS="-static -I/usr/local/include"
+  export CFLAGS="${CFLAGS:+$CFLAGS }-static -I/usr/local/include"
   export LDFLAGS="-static -L/usr/local/lib"
 
   # Convince ffmpeg that we want to build for mingw64 (native

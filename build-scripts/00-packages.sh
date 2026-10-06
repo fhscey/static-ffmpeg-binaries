@@ -132,6 +132,11 @@ elif [[ "$RUNNER_OS" == "Windows" ]]; then
     WINDOWS_PACKAGES+=(mingw-w64-clang-aarch64-clang)
     echo "CC=clang" >> "$GITHUB_ENV"
     echo "CXX=clang++" >> "$GITHUB_ENV"
+    echo "AR=llvm-ar" >> "$GITHUB_ENV"
+    echo "RANLIB=llvm-ranlib" >> "$GITHUB_ENV"
+    ARM64_TARGET_FLAGS="-target aarch64-w64-windows-gnu -mcpu=cortex-a75+nodotprod+noi8mm+nosve+nosve2+nosme"
+    echo "CFLAGS=$ARM64_TARGET_FLAGS" >> "$GITHUB_ENV"
+    echo "CXXFLAGS=$ARM64_TARGET_FLAGS" >> "$GITHUB_ENV"
   else
     # Use the MSYS2 compiler because the other GCC toolchains on the runner do
     # not produce clean executables that only depend on standard DLLs.

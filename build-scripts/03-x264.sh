@@ -22,9 +22,15 @@ git clone https://code.videolan.org/videolan/x264.git
 cd x264
 git checkout "$tag"
 
+X264_CONFIGURE_ARGS=()
+if [[ "$RUNNER_OS" == "Windows" && "$TARGET_ARCH" == "arm64" ]]; then
+  X264_CONFIGURE_ARGS+=(--host=aarch64-w64-mingw32)
+fi
+
 # NOTE: disable OpenCL-based features because it uses dlopen and can interfere
 # with static builds.
 ./configure \
+  "${X264_CONFIGURE_ARGS[@]}" \
   --disable-opencl \
   --enable-static
 
