@@ -24,7 +24,13 @@ cd libvpx
 # NOTE: disabling unit tests and examples significantly reduces build
 # time (by 80% as tested on a Jetson Nano)
 # NOTE: --enable-runtime-cpu-detect fails on macOS arm64.
+LIBVPX_CONFIGURE_ARGS=()
+if [[ "$RUNNER_OS" == "Windows" && "$TARGET_ARCH" == "arm64" ]]; then
+  LIBVPX_CONFIGURE_ARGS+=(--target=arm64-win64-gcc)
+fi
+
 ./configure \
+  "${LIBVPX_CONFIGURE_ARGS[@]}" \
   --enable-vp8 \
   --enable-vp9 \
   --disable-unit-tests \
